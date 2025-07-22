@@ -16,4 +16,9 @@ public class GithubOwner {
 		this.login = login;
 	}
 
+	@Override
+	public String toString() {
+		return "GithubOwner [login=" + login + "]";
+	}
+
 }

@@ -1,25 +1,29 @@
 package com.michal.github.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true) // deserialize only known fields
 public class GithubRepo {
 
 	private String name;
 	private GithubOwner owner;
+	private List<GithubBranch> branches;
 	
 	@JsonIgnore
 	private boolean fork;
 
-	public GithubRepo(String name, GithubOwner owner, boolean fork) {
-		super();
-		this.name = name;
-		this.owner = owner;
-		this.fork = fork;
+
+
+	public List<GithubBranch> getBranches() {
+		return branches;
 	}
 
+	public void setBranches(List<GithubBranch> branches) {
+		this.branches = branches;
+	}
 
 	public String getName() {
 		return name;
@@ -46,9 +50,13 @@ public class GithubRepo {
 	}
 
 
+
 	@Override
 	public String toString() {
-		return "GithubRepo [name=" + name + ", owner=" + owner + ", fork=" + fork + "]";
+		return "GithubRepo [name=" + name + ", owner=" + owner + ", branches=" + branches + ", fork=" + fork + "]";
+	}
+
+	public GithubRepo() {
 	}
 
 	

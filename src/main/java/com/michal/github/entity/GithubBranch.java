@@ -2,9 +2,9 @@ package com.michal.github.entity;
 
 public class GithubBranch {
 
-	String name;
-	String commitSha;
-	
+	private String name;
+ 	private GithubCommit commit;
+
 	public GithubBranch() {
 	}
 
@@ -12,17 +12,24 @@ public class GithubBranch {
 		return name;
 	}
 
+	public GithubCommit getCommit() {
+		return commit;
+	}
+
+	public void setCommit(GithubCommit commit) {
+		this.commit = commit;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getCommitSha() {
-		return commitSha;
+	@Override
+	public String toString() {
+		return "GithubBranch [name=" + name + ", commit=" + commit + "]";
 	}
 
-	public void setCommitSha(String commitSha) {
-		this.commitSha = commitSha;
-	}
+
 	
-	
+
 }

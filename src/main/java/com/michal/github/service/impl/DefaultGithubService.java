@@ -2,6 +2,7 @@ package com.michal.github.service.impl;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +29,18 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.michal.github.entity.GithubResponse;
+import com.michal.github.dto.GithubRepoDto;
+import com.michal.github.dto.cnv.RepoCnv;
+import com.michal.github.entity.GithubBranch;
 import com.michal.github.entity.GithubOwner;
 import com.michal.github.entity.GithubRepo;
 import com.michal.github.service.GithubService;
 
 @Service
 public class DefaultGithubService implements GithubService {
+	
+	@Autowired
+	RepoCnv cnv;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -45,22 +52,73 @@ public class DefaultGithubService implements GithubService {
 	private String githubToken;
 	
 	@Value("${github.api.url}")
-	private String githubApiUrl;
+	private String githubBaseApiUrl;
 	
 	
 	@Override
-	public String getNotForkedRepos(String username) throws ParseException, IOException {
+	public String respondToGithubController(String username) throws ParseException, IOException {
 		
-		HttpGet getRequest = prepareGetRequest(username);
-		String responseBody = getResponseBodyFromGithub(getRequest);
-		String response = parseResponseToController(responseBody);
-		return response; 
-
+		HttpGet getRequest = prepareGetRequestToGetReposForUser(username);
+		String responseBody = getResponseBodyOfReposFromGithub(getRequest);
+		List<GithubRepo> notForkedRepos= extractListOfNotForkedRepos(responseBody);
+		List<GithubRepo> reposWithBranchesAssigned = assignBranchesToRepo(notForkedRepos);
+		List<GithubRepoDto> repoDtos = cnv.convertReposToRepoDtos(reposWithBranchesAssigned);
+		
+		return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(repoDtos);
+	
 	}
-
-	private HttpGet prepareGetRequest(String username)
+	
+	/* Get entity of first response - repos */
+	private List<GithubRepo> assignBranchesToRepo(List<GithubRepo> repos) throws ParseException, IOException
 	{
-		String urlToGet = githubApiUrl + "/users/" + username + "/repos";
+		List<GithubRepo> reposWithBranchesAssigned = new ArrayList<>();
+		
+		for (GithubRepo repo : repos) {
+			repo.setBranches(getBranchesForRepo(repo));
+			reposWithBranchesAssigned.add(repo);
+		}
+		
+		return reposWithBranchesAssigned;
+	}
+	
+	/* Get list of branches for single repo */
+	private List<GithubBranch> getBranchesForRepo(GithubRepo repo) throws ParseException, IOException
+	{
+		HttpGet getRequest = prepareGetRequestToGetBranchesForRepo(repo);	
+	
+		HttpResponse httpResponse = httpClient.execute(getRequest);
+		
+		HttpEntity entity = httpResponse.getEntity();
+		
+		if ( entity != null)
+		{
+			 String	responseBody = EntityUtils.toString(entity);
+			 
+			 List<GithubBranch> branches = objectMapper.readValue(responseBody,  new TypeReference<List<GithubBranch>>() {});
+			
+			return branches;
+		}
+		
+		return null;
+	}	
+		
+	
+	private HttpGet prepareGetRequestToGetBranchesForRepo(GithubRepo repo)
+	{
+		String urlToGet = githubBaseApiUrl + "/repos/" + repo.getOwner().getLogin() + "/" + repo.getName() + "/branches";
+		HttpGet getRequest = new HttpGet(urlToGet);
+		getRequest.addHeader("Accept", "application/json");
+		
+		if ( githubToken != null) {
+			getRequest.addHeader("Authorization", "Bearer " + githubToken);
+		}
+
+		return getRequest;
+	}
+	
+	private HttpGet prepareGetRequestToGetReposForUser(String username)
+	{
+		String urlToGet = githubBaseApiUrl + "/users/" + username + "/repos";
 
 		HttpGet getRequest = new HttpGet(urlToGet);
 		getRequest.addHeader("Accept", "application/json");
@@ -72,7 +130,8 @@ public class DefaultGithubService implements GithubService {
 		return getRequest;
 	}
 	
-	private String getResponseBodyFromGithub(HttpGet getRequest) throws ParseException, IOException
+	/* Get entity of first response - repos */
+	private String getResponseBodyOfReposFromGithub(HttpGet getRequest) throws ParseException, IOException
 	{
 		HttpResponse httpResponse = httpClient.execute(getRequest);
 		
@@ -91,20 +150,19 @@ public class DefaultGithubService implements GithubService {
 			return responseBody;
 			
 		}	
-		return "test";
+		return "error in getResponseBodyFromGithub";
 	}
 
-	private String parseResponseToController(String responseBody) throws JsonMappingException, JsonProcessingException
+	/* Extract list of not forked repos from first Github response */
+	private List<GithubRepo> extractListOfNotForkedRepos(String responseBody) throws JsonMappingException, JsonProcessingException
 	{
 		// extract all repos into a list
 		List<GithubRepo> repos = objectMapper.readValue(responseBody, new TypeReference<List<GithubRepo>>() {});
         
 		// keep only not-forked repos
         List<GithubRepo> notForkedRepos = repos.stream().filter(repo -> !repo.isFork()).collect(Collectors.toList());
+  
         
-        String notForkedReposInJson = objectMapper.writeValueAsString(notForkedRepos);
-        System.out.println(notForkedReposInJson);
-       
-        return notForkedReposInJson;
+        return notForkedRepos;
 	}
 }

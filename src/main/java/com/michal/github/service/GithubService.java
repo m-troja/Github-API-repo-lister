@@ -6,5 +6,5 @@ import org.apache.http.ParseException;
 
 public interface GithubService {
 	
-	String getNotForkedRepos(String username) throws ParseException, IOException;
+	String respondToGithubController(String username) throws ParseException, IOException;
 }
