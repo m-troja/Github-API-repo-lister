@@ -20,7 +20,7 @@ public class RepositoriesRestController {
 	@RequestMapping("/repositories")
 	public String doGet(@RequestParam String username) throws ParseException, IOException
 	{
-		return githubService.respondToGithubController(username);
+		return githubService.getUserReposWithBranches(username);
 	}
 
 }
