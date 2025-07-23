@@ -25,6 +25,9 @@ public class BranchDto {
 	public String toString() {
 		return "BranchDto [branchName=" + branchName + ", lastCommitSha=" + lastCommitSha + "]";
 	}
+	public BranchDto() {
+		super();
+	}
 	
 	
 

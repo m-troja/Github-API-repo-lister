@@ -30,9 +30,9 @@ public class RepositoriesRestController {
 	                .contentType(MediaType.APPLICATION_JSON)
 	                .body(json);
 	    } catch (UserNotFoundException ex) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	        return ResponseEntity
+	        		.status(HttpStatus.NOT_FOUND)
 	                .body(new StatusResponse(404, ex.getMessage()));
 	    }
 	}
-
 }

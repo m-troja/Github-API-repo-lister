@@ -21,7 +21,7 @@ import com.michal.github.dto.GithubRepoDto;
 import com.michal.github.dto.cnv.RepoCnv;
 import com.michal.github.entity.GithubBranch;
 import com.michal.github.entity.GithubRepo;
-import com.michal.github.entity.StatusResponse;
+import com.michal.github.exception.UserNotFoundException;
 import com.michal.github.service.GithubService;
 
 @Service
@@ -42,14 +42,15 @@ public class DefaultGithubService implements GithubService {
     @Value("${github.api.url}")
     private String githubBaseApiUrl;
 
+    private record ReposResult(int statusCode, String responseBody) {}
+
     @Override
     public String getUserReposWithBranches(String username) throws IOException {
        
     	ReposResult result = fetchUserRepos(username);
-
-        if (result.statusCode() == HttpStatus.SC_NOT_FOUND) {
-            return objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(new StatusResponse(404, "User " + username + " was not found"));
+        
+    	if (result.statusCode() == HttpStatus.SC_NOT_FOUND) {
+            throw new UserNotFoundException("User " + username + " was not found");        
         }
 
         List<GithubRepo> notForked = extractNotForkedRepos(result.responseBody());
@@ -102,5 +103,4 @@ public class DefaultGithubService implements GithubService {
         return objectMapper.readValue(body, new TypeReference<>() {});
     }
 
-    private record ReposResult(int statusCode, String responseBody) {}
 }
