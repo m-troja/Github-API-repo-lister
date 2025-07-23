@@ -2,6 +2,7 @@
 
 A Spring Boot application that fetches all public repositories for a given GitHub username and lists their branches (excluding forked repositories).  
 It consumes the GitHub REST API and returns the result as JSON.
+Please store github.token into /src/main/resources/secrets.properties to increase limit of requests from 60 to 5000 request per hour.
 
 ## Features
 
