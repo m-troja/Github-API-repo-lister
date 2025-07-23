@@ -9,11 +9,11 @@ It consumes the GitHub REST API and returns the result as JSON.
 - Filter out forked repositories
 - Fetch all branches for each repository
 - Return customized data in structured JSON format:
-	- respository name
-	- owner login
-	- branches:
-		- branch name
-		- last commit sha
+  - respository name
+  - owner login
+  - branches:
+    - branch name
+    - last commit sha
 
 ## Technologies
 
@@ -23,7 +23,7 @@ It consumes the GitHub REST API and returns the result as JSON.
 
 ## API Endpoint
 
-```GET /v1/repositories?login=${GitHubLogin}```
+`GET /v1/repos?login=${GitHubLogin}`
 
 **Parameters:**
 
@@ -32,14 +32,14 @@ It consumes the GitHub REST API and returns the result as JSON.
 **Example request:**
 
 ```http
-GET http://localhost:8080/v1/repositories?username=m-troja
+GET http://localhost:8080/v1/repos?username=m-troja
 ```
+
 ## Response:
 
 `200 OK` - Successful fetch of repositories
 
 `404 Not Found` - If GitHub user doesn't exist
-
 
 Example Succesfull Response:
 
@@ -63,6 +63,7 @@ Example Succesfull Response:
 ```
 
 Example Error Response:
+
 ```json
 {
   "statusCode": 404,
