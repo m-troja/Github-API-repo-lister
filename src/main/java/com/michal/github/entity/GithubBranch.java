@@ -8,6 +8,11 @@ public class GithubBranch {
 	public GithubBranch() {
 	}
 
+	public GithubBranch(String name) {
+		super();
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}
