@@ -32,7 +32,7 @@ It consumes the GitHub REST API and returns the result as JSON.
 **Example request:**
 
 ```http
-GET http://localhost:8080/v1/repos?username=m-troja
+GET http://localhost:8080/v1/repos?login=m-troja
 ```
 
 ## Response:
