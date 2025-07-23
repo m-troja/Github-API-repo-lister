@@ -18,9 +18,9 @@ public class RepositoriesRestController {
 	private GithubService githubService;
 	
 	@RequestMapping("/repositories")
-	public String doGet(@RequestParam String username) throws ParseException, IOException
+	public String doGet(@RequestParam String login) throws ParseException, IOException
 	{
-		return githubService.getUserReposWithBranches(username);
+		return githubService.getUserReposWithBranches(login);
 	}
 
 }

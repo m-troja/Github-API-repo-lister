@@ -1,2 +1,71 @@
 # Github-API-repo-lister
-Github API to list user's repo which are not a fork
+
+A Spring Boot application that fetches all public repositories for a given GitHub username and lists their branches (excluding forked repositories).  
+It consumes the GitHub REST API and returns the result as JSON.
+
+## Features
+
+- Fetch public repositories for any GitHub user
+- Filter out forked repositories
+- Fetch all branches for each repository
+- Return customized data in structured JSON format:
+	- respository name
+	- owner login
+	- branches:
+		- branch name
+		- last commit sha
+
+## Technologies
+
+- Java 21
+- Spring Boot 3.5
+- GitHub REST API
+
+## API Endpoint
+
+```GET /v1/repositories?login=${GitHubLogin}```
+
+**Parameters:**
+
+- `GitHubLogin` - GitHub login (required)
+
+**Example request:**
+
+```http
+GET http://localhost:8080/v1/repositories?username=m-troja
+```
+## Response:
+
+`200 OK` - Successful fetch of repositories
+
+`404 Not Found` - If GitHub user doesn't exist
+
+
+Example Succesfull Response:
+
+```json
+[
+  {
+    "repositoryName": "my-repo",
+    "ownerLogin": "m-troja",
+    "branches": [
+      {
+        "branchName": "main",
+        "lastCommitSha": "a1b2c3d4..."
+      },
+      {
+        "branchName": "dev",
+        "lastCommitSha": "e5f6g7h8..."
+      }
+    ]
+  }
+]
+```
+
+Example Error Response:
+```json
+{
+  "statusCode": 404,
+  "message": "User m-troja was not found"
+}
+```
