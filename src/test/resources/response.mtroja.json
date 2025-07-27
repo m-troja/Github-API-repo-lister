@@ -1,0 +1,316 @@
+[
+    {
+        "repositoryName": "-Inheritance-and-polymorphism-exercise",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "dbd89b4a26d3b135d9b92c77cbe873fe61e758b2"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Annotation",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "c7e867638f22d885a98bfa5c0d5da98c1cd1d8c0"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Backend_store_OOP",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "4cfdbf2d5817575e3042d4f0725e637c9ad6e59e"
+            }
+        ]
+    },
+    {
+        "repositoryName": "BookService",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "7d9ba2d1bddcc1cb0bebf395f01b4f9fc9e0b78e"
+            }
+        ]
+    },
+    {
+        "repositoryName": "ChatGPT-SpringBoot",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "cbf2daed09eb4d503f4d019bd38f05b0645de562"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Comparable",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "a0b12e2000592d6b8c18997bec115a8c03f8b3bd"
+            },
+            {
+                "branchName": "master",
+                "lastCommitSha": "6df2a2d393d2fc10f9ed1ff672e6d185ab954de0"
+            },
+            {
+                "branchName": "trojan",
+                "lastCommitSha": "c9b34faae471358f49c261ba626831e34c51e903"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Data-structure",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "48a5cbe0d6f590534e586a1eae4acc1b1d1d29ff"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Date-Time",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "9dbd08fa621d82c13bb2fb6e14ac570e3e2de746"
+            }
+        ]
+    },
+    {
+        "repositoryName": "DefaultRecursiveAction",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "383a503b68d24904d73ab16f1f9156423bfdb2ed"
+            }
+        ]
+    },
+    {
+        "repositoryName": "flow",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "4fa5b069c141de14780452f3fa380694c41bebda"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Github-API-repo-lister",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "6cc3d5fed1298ed5e900ac355fa367679df8b5cb"
+            },
+            {
+                "branchName": "test-branch-1",
+                "lastCommitSha": "cef99cfe62811503253da9b346ebecb54e7b6cc7"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Helpdesk",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "d88ef7fcf6c903c67cb0eb9e221542026fbe734f"
+            }
+        ]
+    },
+    {
+        "repositoryName": "java-learnit-web-online-store",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "master",
+                "lastCommitSha": "c1043cb87f071e8649299528a0783a06a93eae24"
+            }
+        ]
+    },
+    {
+        "repositoryName": "java-modules",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "master",
+                "lastCommitSha": "d2be31a693ba0967593b44144a8b3a4e863017f2"
+            }
+        ]
+    },
+    {
+        "repositoryName": "JS-course",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "a909850ede9eac3d4e7b95ac736b244a3c6599c6"
+            }
+        ]
+    },
+    {
+        "repositoryName": "LRU-Cache",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "a1b048ee55775304a0d9f245294678706abc74d7"
+            }
+        ]
+    },
+    {
+        "repositoryName": "m-troja.github.io",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "a7efb54a2af9465a7247804fd71adf467961fcab"
+            }
+        ]
+    },
+    {
+        "repositoryName": "online-store-2",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "d370e54abe912339e291de1044164a3690bcb5b0"
+            },
+            {
+                "branchName": "test2",
+                "lastCommitSha": "c109057b4e8225d08ff2d0cee264350323ac7105"
+            }
+        ]
+    },
+    {
+        "repositoryName": "online-store-spring",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "44d740dc317a2d99624b92a1769ec607122e1640"
+            },
+            {
+                "branchName": "test",
+                "lastCommitSha": "44d740dc317a2d99624b92a1769ec607122e1640"
+            }
+        ]
+    },
+    {
+        "repositoryName": "onlinestore-spring-security",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "a801ffca51b1f090460e34048cc43e8d70eea47c"
+            }
+        ]
+    },
+    {
+        "repositoryName": "onlinestore-springmvc-springdatajpa",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "484f6fd8b08ba417d67ca092b009ea453f726a11"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Online_Store-SpringMVC-SpringDataJPA",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "ea18386e725cf56ca1a08ae4083c50df88331be1"
+            }
+        ]
+    },
+    {
+        "repositoryName": "SemaphoreDemo",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "bd1e42ab4f4c1e9c5d7ef0ebba0b6e85bbaf5654"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Sorting-by-age",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "65f8b0da7449b5270cae9f98e879c1e0ab2f1bcb"
+            }
+        ]
+    },
+    {
+        "repositoryName": "SSH_Test",
+        "ownerLogin": "m-troja",
+        "branches": []
+    },
+    {
+        "repositoryName": "store-test",
+        "ownerLogin": "m-troja",
+        "branches": []
+    },
+    {
+        "repositoryName": "Stream-Console-to-File",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "80257435a0b16689c84a3a0a53d24ba9f8fd911b"
+            }
+        ]
+    },
+    {
+        "repositoryName": "StreamIO-book-filter",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "91c05ad5d1edc08199771739079d673f7bd69165"
+            },
+            {
+                "branchName": "master",
+                "lastCommitSha": "fa5f7837a99db624e69eff89c2ab6fa604dd6410"
+            }
+        ]
+    },
+    {
+        "repositoryName": "StreamIO-filter-words",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "master",
+                "lastCommitSha": "f455be3ce519e901c2d07ffb50c44cd770d54f55"
+            }
+        ]
+    },
+    {
+        "repositoryName": "Tell-dont-ask",
+        "ownerLogin": "m-troja",
+        "branches": [
+            {
+                "branchName": "main",
+                "lastCommitSha": "1882c9fe0002fb14d8bd73f809431a898eda70b7"
+            }
+        ]
+    }
+]

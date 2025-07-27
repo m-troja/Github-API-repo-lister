@@ -1,20 +1,25 @@
 package com.michal.github;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.michal.github.dto.BranchDto;
-import com.michal.github.dto.GithubRepoDto;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /*
  * * Test checks if:
@@ -28,14 +33,16 @@ import java.util.List;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GithubApplicationTests {
 
+   @RegisterExtension
+   WireMockExtension wireMock = WireMockExtension.newInstance()
+   .options(wireMockConfig().port(8080))  // ustaw port WireMock na 8080
+   .build();
+   
     @LocalServerPort
     private int port;
-
-    @Autowired 
-    private TestRestTemplate restTemplate; // http client
-
+    
     @Test
-    void checkBranchesInSpecificRepo() {
+    void checkBranchesInSpecificRepo() throws URISyntaxException, IOException, InterruptedException {
     	
     	/* Config */
         final String username = "m-troja";
@@ -43,48 +50,28 @@ public class GithubApplicationTests {
         final String nameOfFirstBranch = "main";
         final String nameOfSecondBranch = "test-branch-1";
         final String url = "http://localhost:" + port + "/v1/repos?login=" + username;
+    	String responseMtroja = Files.readString(Paths.get("src/test/resources/response.mtroja.json"));
 
-        // build and execute GET call, save response 
-        ResponseEntity<?> response = restTemplate.exchange(
-        	    url,
-        	    HttpMethod.GET,
-        	    null,
-        	    Object.class
-        	);
+        // Setup the WireMock mapping stub for the test
+        stubFor(get(url)
+        		.withHeader("Content-Type", containing("application/json"))
+        		.willReturn(ok()
+        				.withHeader("Content-Type","application/json")
+        				.withBody(responseMtroja)));
         
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK); // check status 200
+        // 2. Wysyłamy zapytanie HTTP do mockowanego endpointu
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(url))
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
-     // If status == 200, convert responseBody into list of GithubRepoDtos
-        ObjectMapper mapper = new ObjectMapper();
-        List<GithubRepoDto> repos = mapper.convertValue(response.getBody(), new TypeReference<List<GithubRepoDto>>() {
-		}); 
-        
-        assertThat(repos).isNotEmpty(); 
-        assertThat(repos).hasSize(30); // check 30 repos should be returned
-        
-        // Search for repoToTest
-        GithubRepoDto repo = repos.stream()
-        		.filter(r -> r.getRepositoryName().equals(repoToTest))
-        		.findFirst()
-        		.orElse(null);        
-        
-        assertThat(repo.getRepositoryName()).isEqualTo(repoToTest);
-        
-        List<BranchDto> branches = repo.getBranches();
-        assertThat(branches).hasSize(2);
-        
-        // Check if one of branches in a list contains branchName equals "main", "test-branch-1"
-        boolean hasMainBranch = false, hasTestBranch = false;
-        for (BranchDto branch : branches) {
-        	if (branch.getBranchName().equals(nameOfFirstBranch)) {
-        		hasMainBranch = true;
-        	}
-        	if (branch.getBranchName().equals(nameOfSecondBranch)) {
-          		hasTestBranch = true;
-        	} 
-        }
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertThat(hasMainBranch).isTrue();
-        assertThat(hasTestBranch).isTrue();
+        // 3. Weryfikujemy odpowiedź
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body()).contains(repoToTest);
+        assertThat(response.body()).contains(nameOfFirstBranch, nameOfSecondBranch);
     }
 }

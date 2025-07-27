@@ -30,6 +30,89 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+	
+	
+	<!-- jetty for WireMock -->
+	
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-server</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-util</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-http</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-io</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-servlet</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-security</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-webapp</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-servlets</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-proxy</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-alpn-server</artifactId>
+		    <version>11.0.16</version>
+		    <scope>test</scope>
+		</dependency>
+
+	<!-- Wiremock -->
+	
+		<dependency>
+		    <groupId>org.wiremock</groupId>
+		    <artifactId>wiremock</artifactId>
+		    <version>3.13.1</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.assertj</groupId>
+		    <artifactId>assertj-core</artifactId>
+		    <version>3.26.3</version>
+		    <scope>test</scope>
+		</dependency>
+
+	<!-- Spring boot starters -->
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
