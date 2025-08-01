@@ -24,26 +24,23 @@ import com.michal.github.service.GithubService;
 @Service
 public class DefaultGithubService implements GithubService {
 
-    @Autowired
     private RepoCnv repoCnv;
 
-    @Autowired
     private ObjectMapper objectMapper;
-
 
     private final RestClient githubRestClient;
     
     private record ReposResult(HttpStatus status, String responseBody) {}
 
     @Override
-    public String getUserReposWithBranches(String username) throws IOException {
+    public List<GithubRepoDto> getUserReposWithBranches(String username) throws IOException  {
        
     	ReposResult result = fetchUserRepos(username);
         List<GithubRepo> notForked = extractNotForkedRepos(result.responseBody());
         List<GithubRepo> reposWithBranchesAssigned = assignBranchesToRepos(notForked);
         List<GithubRepoDto> repoDtos = repoCnv.convertReposToRepoDtos(reposWithBranchesAssigned);
 
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(repoDtos);
+        return repoDtos;
     }
 
     private ReposResult fetchUserRepos(String username)  {
@@ -63,7 +60,7 @@ public class DefaultGithubService implements GithubService {
         	if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
         		throw new UserNotFoundException(username);
         	}
-        	throw new RuntimeException("Github Api error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+        	throw new RuntimeException("Github API error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
         }
         
     }
@@ -92,8 +89,10 @@ public class DefaultGithubService implements GithubService {
 
         return branches;
     }
-
-	public DefaultGithubService(@Qualifier("githubRestClient") RestClient githubRestClient) {
+    
+	public DefaultGithubService(RepoCnv repoCnv, ObjectMapper objectMapper, RestClient githubRestClient) {
+		this.repoCnv = repoCnv;
+		this.objectMapper = objectMapper;
 		this.githubRestClient = githubRestClient;
 	}
 

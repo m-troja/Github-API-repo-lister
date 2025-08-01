@@ -17,7 +17,6 @@ public class RestClientConfig {
     @Bean
     public RestClient githubRestClient()
     {
-
     	 RestClient.Builder builder = RestClient.builder()
     			.baseUrl(githubBaseApiUrl)
     			.defaultHeader("Accept", "application/json");
