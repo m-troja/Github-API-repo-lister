@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
+import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,26 +30,15 @@ public class DefaultGithubService implements GithubService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private CloseableHttpClient httpClient;
 
-    @Value("${github.token}")
-    private String githubToken;
-
-    @Value("${github.api.url}")
-    private String githubBaseApiUrl;
-
-    private record ReposResult(int statusCode, String responseBody) {}
+    private final RestClient githubRestClient;
+    
+    private record ReposResult(HttpStatus status, String responseBody) {}
 
     @Override
     public String getUserReposWithBranches(String username) throws IOException {
        
     	ReposResult result = fetchUserRepos(username);
-        
-    	if (result.statusCode() == HttpStatus.SC_NOT_FOUND) {
-            throw new UserNotFoundException("User " + username + " was not found");        
-        }
-
         List<GithubRepo> notForked = extractNotForkedRepos(result.responseBody());
         List<GithubRepo> reposWithBranchesAssigned = assignBranchesToRepos(notForked);
         List<GithubRepoDto> repoDtos = repoCnv.convertReposToRepoDtos(reposWithBranchesAssigned);
@@ -60,17 +46,26 @@ public class DefaultGithubService implements GithubService {
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(repoDtos);
     }
 
-    private ReposResult fetchUserRepos(String username) throws IOException {
-        String url = githubBaseApiUrl + "/users/" + username + "/repos";
-        HttpGet request = new HttpGet(url);
-        request.addHeader("Accept", "application/json");
-        if (githubToken != null) {
-            request.addHeader("Authorization", "Bearer " + githubToken);
-        }
+    private ReposResult fetchUserRepos(String username)  {
+        String uri = "/users/" + username + "/repos";
 
-        HttpResponse response = httpClient.execute(request);
-        String responseBody = EntityUtils.toString(response.getEntity());
-        return new ReposResult(response.getStatusLine().getStatusCode(), responseBody);
+        try {  
+            String body = githubRestClient.get()
+        			.uri(uri)
+	        		.retrieve() 
+	        		.body(String.class); 
+            
+            return new ReposResult(HttpStatus.OK, body);
+
+        }
+        catch(HttpClientErrorException e)
+        {
+        	if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+        		throw new UserNotFoundException(username);
+        	}
+        	throw new RuntimeException("Github Api error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+        }
+        
     }
 
     private List<GithubRepo> extractNotForkedRepos(String responseBody) throws JsonProcessingException {
@@ -88,19 +83,18 @@ public class DefaultGithubService implements GithubService {
     }
 
     private List<GithubBranch> fetchBranches(GithubRepo repo) throws IOException {
-        String url = githubBaseApiUrl + "/repos/" + repo.getOwner().getLogin() + "/" + repo.getName() + "/branches";
-        HttpGet request = new HttpGet(url);
-        request.addHeader("Accept", "application/json");
-        if (githubToken != null) {
-            request.addHeader("Authorization", "Bearer " + githubToken);
-        }
+        String uri = "/repos/" + repo.getOwner().getLogin() + "/" + repo.getName() + "/branches";
+       
+        List<GithubBranch> branches = githubRestClient.get()
+    			.uri(uri)
+        		.retrieve() 
+        		.body(new ParameterizedTypeReference<List<GithubBranch>>() {});
 
-        HttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
-        if (entity == null) return List.of();
-        String body = EntityUtils.toString(entity);
-
-        return objectMapper.readValue(body, new TypeReference<>() {});
+        return branches;
     }
+
+	public DefaultGithubService(@Qualifier("githubRestClient") RestClient githubRestClient) {
+		this.githubRestClient = githubRestClient;
+	}
 
 }

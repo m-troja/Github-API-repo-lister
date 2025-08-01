@@ -21,6 +21,8 @@ Please store github.token into /src/main/resources/secrets.properties to increas
 - Java 21
 - Spring Boot 3.5
 - GitHub REST API
+- WireMock
+- JSONassert
 
 ## API Endpoint
 

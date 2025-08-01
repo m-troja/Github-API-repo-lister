@@ -1,7 +1,9 @@
 package com.michal.github;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -32,34 +34,31 @@ import java.nio.file.Paths;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GithubApplicationTests {
+	   
+    @LocalServerPort
+    private int port = 8080;
 
    @RegisterExtension
    WireMockExtension wireMock = WireMockExtension.newInstance()
-   .options(wireMockConfig().port(8080))  // ustaw port WireMock na 8080
-   .build();
-   
-    @LocalServerPort
-    private int port;
+	   .options(wireMockConfig().port(port))  // set WireMock port 8080
+	   .build();
     
     @Test
     void checkBranchesInSpecificRepo() throws URISyntaxException, IOException, InterruptedException {
-    	
+    	    	
     	/* Config */
         final String username = "m-troja";
-        final String repoToTest = "Github-API-repo-lister";
-        final String nameOfFirstBranch = "main";
-        final String nameOfSecondBranch = "test-branch-1";
         final String url = "http://localhost:" + port + "/v1/repos?login=" + username;
-    	String responseMtroja = Files.readString(Paths.get("src/test/resources/response.mtroja.json"));
+    	String responseJsonNonForks = Files.readString(Paths.get("src/test/resources/response.mtroja.json"));
 
         // Setup the WireMock mapping stub for the test
         stubFor(get(url)
         		.withHeader("Content-Type", containing("application/json"))
         		.willReturn(ok()
         				.withHeader("Content-Type","application/json")
-        				.withBody(responseMtroja)));
+        				.withBody(responseJsonNonForks)));
         
-        // 2. Wysyłamy zapytanie HTTP do mockowanego endpointu
+        // 2. Send  HTTP request to mocked endpoint
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(url))
@@ -69,9 +68,7 @@ public class GithubApplicationTests {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // 3. Weryfikujemy odpowiedź
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).contains(repoToTest);
-        assertThat(response.body()).contains(nameOfFirstBranch, nameOfSecondBranch);
+        // 3. Verify non-forks
+        JSONAssert.assertEquals(responseJsonNonForks, response.body(), false);
     }
 }
